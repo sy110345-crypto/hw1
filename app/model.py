@@ -1,9 +1,14 @@
+import random
+from PIL import Image
+
+def preprocess_image(image: Image.Image):
+    return image.resize((128, 128))
+
 def predict_image(image: Image.Image):
     processed_image = preprocess_image(image)
-    width, height = processed_image.size
-
+    
+    # 랜덤하게 결과 생성 (테스트용)
     score = random.random()
-    # 성별을 위한 새로운 랜덤값
     gender_score = random.random()
 
     if score >= 0.5:
@@ -13,11 +18,11 @@ def predict_image(image: Image.Image):
         label = "cat"
         confidence = 1.0 - score
 
-    # 성별 결정 로직 추가
+    # 성별 로직 추가 (이게 있어야 테스트가 통과됨)
     gender = "male" if gender_score >= 0.5 else "female"
 
     return {
         "label": label,
         "confidence": round(confidence, 4),
-        "gender": gender  # <-- 이 부분이 추가되어야 테스트가 통과됩니다!
+        "gender": gender
     }

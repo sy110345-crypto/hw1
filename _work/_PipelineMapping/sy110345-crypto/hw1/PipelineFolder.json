@@ -1,0 +1,12 @@
+﻿{
+  "repositoryName": "sy110345-crypto/hw1",
+  "pipelineDirectory": "hw1",
+  "workspaceDirectory": "hw1\\hw1",
+  "repositories": {
+    "sy110345-crypto/hw1": {
+      "repositoryPath": "hw1\\hw1",
+      "lastRunOn": "04/08/2026 21:43:02 +09:00"
+    }
+  },
+  "lastRunOn": "04/08/2026 22:08:32 +09:00"
+}

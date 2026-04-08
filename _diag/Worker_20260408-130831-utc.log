@@ -1,0 +1,2381 @@
+[2026-04-08 13:08:31Z INFO HostContext] No proxy settings were found based on environmental variables (http_proxy/https_proxy/HTTP_PROXY/HTTPS_PROXY)
+[2026-04-08 13:08:31Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:31Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:31Z INFO HostContext] Well known config file 'Credentials': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\.credentials'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:32Z INFO HostContext] Well known config file 'Runner': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\.runner'
+[2026-04-08 13:08:32Z INFO Worker] Version: 2.333.1
+[2026-04-08 13:08:32Z INFO Worker] Commit: 6792966801e8925346735b68c03bf9f347af4646
+[2026-04-08 13:08:32Z INFO Worker] Culture: ko-KR
+[2026-04-08 13:08:32Z INFO Worker] UI Culture: ko-KR
+[2026-04-08 13:08:32Z INFO Worker] Waiting to receive the job message from the channel.
+[2026-04-08 13:08:32Z INFO ProcessChannel] Receiving message of length 21190, with hash 'f79d6825bae4606557dce30f24ebfd617f284c03039e2974a8b9168375545fc3'
+[2026-04-08 13:08:32Z INFO Worker] Message received.
+[2026-04-08 13:08:32Z INFO Worker] Job message:
+ {
+  "fileTable": [
+    ".github/workflows/ci.yml"
+  ],
+  "mask": [
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    }
+  ],
+  "steps": [
+    {
+      "type": "action",
+      "reference": {
+        "type": "repository",
+        "name": "docker/login-action",
+        "ref": "v3",
+        "repositoryType": "GitHub"
+      },
+      "displayNameToken": {
+        "type": 0,
+        "file": 1,
+        "line": 51,
+        "col": 15,
+        "lit": "Log in to Docker Hub"
+      },
+      "contextName": "__docker_login-action",
+      "inputs": {
+        "type": 2,
+        "file": 1,
+        "line": 54,
+        "col": 11,
+        "map": [
+          {
+            "key": {
+              "type": 0,
+              "file": 1,
+              "line": 54,
+              "col": 11,
+              "lit": "username"
+            },
+            "value": {
+              "type": 3,
+              "file": 1,
+              "line": 54,
+              "col": 21,
+              "expr": "secrets.DOCKERHUB_USERNAME"
+            }
+          },
+          {
+            "key": {
+              "type": 0,
+              "file": 1,
+              "line": 55,
+              "col": 11,
+              "lit": "password"
+            },
+            "value": {
+              "type": 3,
+              "file": 1,
+              "line": 55,
+              "col": 21,
+              "expr": "secrets.DOCKERHUB_TOKEN"
+            }
+          }
+        ]
+      },
+      "condition": "success()",
+      "id": "9cc54c74-3099-49d7-bc31-a5f5d5e3646d",
+      "name": "__docker_login-action"
+    },
+    {
+      "type": "action",
+      "reference": {
+        "type": "script"
+      },
+      "displayNameToken": {
+        "type": 0,
+        "file": 1,
+        "line": 57,
+        "col": 15,
+        "lit": "Pull latest image and Restart container"
+      },
+      "contextName": "__run",
+      "inputs": {
+        "type": 2,
+        "map": [
+          {
+            "key": "script",
+            "value": {
+              "type": 3,
+              "file": 1,
+              "line": 59,
+              "col": 14,
+              "expr": "format('# 1. 최신 이미지 받아오기\ndocker pull {0}/cat-dog-api:latest\n\n# 2. 기존 컨테이너 확인 후 처리 (PowerShell 안정성 강화)\n$containerName = \"cat-dog-api-container\"\n$exists = docker ps -a -q --filter \"name=$containerName\"\n\nif ($exists) {{\n    Write-Host \"기존 컨테이너($containerName)를 중지하고 삭제합니다...\"\n    docker stop $containerName\n    docker rm $containerName\n}} else {{\n    Write-Host \"실행 중인 기존 컨테이너가 없습니다.\"\n}}\n\n# 3. 새 컨테이너 실행 (PowerShell 줄바꿈 기호 ` 사용)\ndocker run -d `\n  --name $containerName `\n  -p 8080:8080 `\n  --restart always `\n  {1}/cat-dog-api:latest\n\n# 4. 사용하지 않는 오래된 이미지 정리\ndocker image prune -f\n', secrets.DOCKERHUB_USERNAME, secrets.DOCKERHUB_USERNAME)"
+            }
+          },
+          {
+            "key": "shell",
+            "value": {
+              "type": 0,
+              "file": 1,
+              "line": 58,
+              "col": 16,
+              "lit": "powershell"
+            }
+          }
+        ]
+      },
+      "condition": "success()",
+      "id": "fbb33da2-296f-422b-b26e-50f47fa86979",
+      "name": "__run"
+    }
+  ],
+  "variables": {
+    "Actions.EnableHttpRedirects": {
+      "value": "true"
+    },
+    "DOCKERHUB_TOKEN": {
+      "value": "*** ",
+      "isSecret": true
+    },
+    "DOCKERHUB_USERNAME": {
+      "value": "***",
+      "isSecret": true
+    },
+    "DistributedTask.AddWarningToNode12Action": {
+      "value": "true"
+    },
+    "DistributedTask.AddWarningToNode16Action": {
+      "value": "true"
+    },
+    "DistributedTask.AllowRunnerContainerHooks": {
+      "value": "true"
+    },
+    "DistributedTask.DeprecateStepOutputCommands": {
+      "value": "true"
+    },
+    "DistributedTask.DetailUntarFailure": {
+      "value": "true"
+    },
+    "DistributedTask.EnableCompositeActions": {
+      "value": "true"
+    },
+    "DistributedTask.EnableJobServerQueueTelemetry": {
+      "value": "true"
+    },
+    "DistributedTask.EnhancedAnnotations": {
+      "value": "true"
+    },
+    "DistributedTask.ForceGithubJavascriptActionsToNode16": {
+      "value": "true"
+    },
+    "DistributedTask.ForceGithubJavascriptActionsToNode20": {
+      "value": "true"
+    },
+    "DistributedTask.LogTemplateErrorsAsDebugMessages": {
+      "value": "true"
+    },
+    "DistributedTask.MarkJobAsFailedOnWorkerCrash": {
+      "value": "true"
+    },
+    "DistributedTask.NewActionMetadata": {
+      "value": "true"
+    },
+    "DistributedTask.UploadStepSummary": {
+      "value": "true"
+    },
+    "DistributedTask.UseActionArchiveCache": {
+      "value": "true"
+    },
+    "DistributedTask.UseWhich2": {
+      "value": "true"
+    },
+    "RunService.FixEmbeddedIssues": {
+      "value": "true"
+    },
+    "actions.runner.requirenode24": {
+      "value": "false"
+    },
+    "actions.runner.usenode24bydefault": {
+      "value": "false"
+    },
+    "actions.runner.warnonnode20": {
+      "value": "true"
+    },
+    "actions_add_check_run_id_to_job_context": {
+      "value": "true"
+    },
+    "actions_batch_action_resolution": {
+      "value": "false"
+    },
+    "actions_container_action_runner_temp": {
+      "value": "true"
+    },
+    "actions_display_helpful_actions_download_errors": {
+      "value": "true"
+    },
+    "actions_runner_compare_workflow_parser": {
+      "value": "false"
+    },
+    "actions_runner_deprecate_linux_arm32": {
+      "value": "false"
+    },
+    "actions_runner_emit_composite_markers": {
+      "value": "false"
+    },
+    "actions_runner_kill_linux_arm32": {
+      "value": "false"
+    },
+    "actions_runner_node20_removal_date": {
+      "value": ""
+    },
+    "actions_runner_node24_default_date": {
+      "value": ""
+    },
+    "actions_service_container_command": {
+      "value": "true"
+    },
+    "actions_set_orchestration_id_env_for_actions": {
+      "value": "true"
+    },
+    "actions_skip_retry_complete_job_upon_known_errors": {
+      "value": "true"
+    },
+    "actions_snapshot_preflight_hosted_runner_check": {
+      "value": "false"
+    },
+    "actions_snapshot_preflight_image_gen_pool_check": {
+      "value": "false"
+    },
+    "actions_use_bearer_token_for_codeload": {
+      "value": "false"
+    },
+    "actions_uses_cache_service_v2": {
+      "value": "true"
+    },
+    "github_token": {
+      "value": "***",
+      "isSecret": true
+    },
+    "system.from_run_service": {
+      "value": "true"
+    },
+    "system.github.job": {
+      "value": "deploy"
+    },
+    "system.github.launch_endpoint": {
+      "value": "https://launch.actions.githubusercontent.com"
+    },
+    "system.github.results_endpoint": {
+      "value": "https://results-receiver.actions.githubusercontent.com/"
+    },
+    "system.github.results_upload_with_sdk": {
+      "value": "true"
+    },
+    "system.github.token": {
+      "value": "***",
+      "isSecret": true
+    },
+    "system.github.token.permissions": {
+      "value": "{\"Contents\":\"read\",\"Metadata\":\"read\",\"Packages\":\"read\"}"
+    },
+    "system.orchestrationId": {
+      "value": "278c19f6-538a-4054-9504-dff52f0f23fd.deploy.__default"
+    },
+    "system.phaseDisplayName": {
+      "value": "deploy"
+    },
+    "system.runner.lowdiskspacethreshold": {
+      "value": "100"
+    },
+    "system.runnerEnvironment": {
+      "value": "self-hosted"
+    },
+    "system.runnerGroupName": {
+      "value": "Default"
+    }
+  },
+  "messageType": "RunnerJobRequest",
+  "plan": {
+    "scopeIdentifier": "00000000-0000-0000-0000-000000000000",
+    "planType": "actions",
+    "version": 0,
+    "planId": "278c19f6-538a-4054-9504-dff52f0f23fd",
+    "planGroup": null,
+    "artifactUri": null,
+    "artifactLocation": null,
+    "definition": null,
+    "owner": null
+  },
+  "timeline": {
+    "id": "278c19f6-538a-4054-9504-dff52f0f23fd",
+    "changeId": 0,
+    "location": null
+  },
+  "jobId": "445ae2bf-57f9-52b9-b743-916f1f1cc265",
+  "jobDisplayName": "deploy",
+  "jobName": "__default",
+  "requestId": 0,
+  "lockedUntil": "0001-01-01T00:00:00",
+  "resources": {
+    "endpoints": [
+      {
+        "data": {
+          "ServerId": "",
+          "ServerName": "",
+          "CacheServerUrl": "https://artifactcache.actions.githubusercontent.com/4QrcZW2En99OzkcTgjHbQvo352svWXdHMnqye4e68iZHWjXJXJ/",
+          "FeedStreamUrl": "wss://results-receiver.actions.githubusercontent.com/_ws/ingest.sock",
+          "ResultsServiceUrl": "https://results-receiver.actions.githubusercontent.com/",
+          "PipelinesServiceUrl": "https://pipelinesghubeus9.actions.githubusercontent.com/4QrcZW2En99OzkcTgjHbQvo352svWXdHMnqye4e68iZHWjXJXJ/",
+          "GenerateIdTokenUrl": "",
+          "ConnectivityChecks": "[\"https://broker.actions.githubusercontent.com/health\",\"https://token.actions.githubusercontent.com/ready\",\"https://run.actions.githubusercontent.com/health\"]"
+        },
+        "name": "SystemVssConnection",
+        "url": "https://run-actions-1-azure-eastus.actions.githubusercontent.com/155/",
+        "authorization": {
+          "parameters": {
+            "AccessToken": "***"
+          },
+          "scheme": "OAuth"
+        },
+        "isShared": false,
+        "isReady": true
+      }
+    ]
+  },
+  "contextData": {
+    "github": {
+      "t": 2,
+      "d": [
+        {
+          "k": "ref",
+          "v": "refs/heads/main"
+        },
+        {
+          "k": "sha",
+          "v": "137fcd561a249c3b18d27bf463f28957b6e5ca7a"
+        },
+        {
+          "k": "repository",
+          "v": "***-crypto/hw1"
+        },
+        {
+          "k": "repository_owner",
+          "v": "***-crypto"
+        },
+        {
+          "k": "repository_owner_id",
+          "v": "268301902"
+        },
+        {
+          "k": "repositoryUrl",
+          "v": "git://github.com/***-crypto/hw1.git"
+        },
+        {
+          "k": "run_id",
+          "v": "24137005552"
+        },
+        {
+          "k": "run_number",
+          "v": "5"
+        },
+        {
+          "k": "retention_days",
+          "v": "90"
+        },
+        {
+          "k": "run_attempt",
+          "v": "1"
+        },
+        {
+          "k": "artifact_cache_size_limit",
+          "v": "10"
+        },
+        {
+          "k": "repository_visibility",
+          "v": "public"
+        },
+        {
+          "k": "actor_id",
+          "v": "268301902"
+        },
+        {
+          "k": "actor",
+          "v": "***-crypto"
+        },
+        {
+          "k": "workflow",
+          "v": "Build and Push Docker Image"
+        },
+        {
+          "k": "head_ref",
+          "v": ""
+        },
+        {
+          "k": "base_ref",
+          "v": ""
+        },
+        {
+          "k": "event_name",
+          "v": "push"
+        },
+        {
+          "k": "server_url",
+          "v": "https://github.com"
+        },
+        {
+          "k": "api_url",
+          "v": "https://api.github.com"
+        },
+        {
+          "k": "graphql_url",
+          "v": "https://api.github.com/graphql"
+        },
+        {
+          "k": "ref_name",
+          "v": "main"
+        },
+        {
+          "k": "ref_protected",
+          "v": false
+        },
+        {
+          "k": "ref_type",
+          "v": "branch"
+        },
+        {
+          "k": "secret_source",
+          "v": "Actions"
+        },
+        {
+          "k": "event",
+          "v": {
+            "t": 2,
+            "d": [
+              {
+                "k": "after",
+                "v": "137fcd561a249c3b18d27bf463f28957b6e5ca7a"
+              },
+              {
+                "k": "base_ref",
+                "v": null
+              },
+              {
+                "k": "before",
+                "v": "2a1a601b82821a505206a06ad93baaccacde0715"
+              },
+              {
+                "k": "commits",
+                "v": {
+                  "t": 1,
+                  "a": [
+                    {
+                      "t": 2,
+                      "d": [
+                        {
+                          "k": "author",
+                          "v": {
+                            "t": 2,
+                            "d": [
+                              {
+                                "k": "email",
+                                "v": "***@khu.ac.kr"
+                              },
+                              {
+                                "k": "name",
+                                "v": "***"
+                              },
+                              {
+                                "k": "username",
+                                "v": "***-crypto"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "k": "committer",
+                          "v": {
+                            "t": 2,
+                            "d": [
+                              {
+                                "k": "email",
+                                "v": "noreply@github.com"
+                              },
+                              {
+                                "k": "name",
+                                "v": "GitHub"
+                              },
+                              {
+                                "k": "username",
+                                "v": "web-flow"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "k": "distinct",
+                          "v": true
+                        },
+                        {
+                          "k": "id",
+                          "v": "137fcd561a249c3b18d27bf463f28957b6e5ca7a"
+                        },
+                        {
+                          "k": "message",
+                          "v": "Update ci.yml"
+                        },
+                        {
+                          "k": "timestamp",
+                          "v": "2026-04-08T22:07:57+09:00"
+                        },
+                        {
+                          "k": "tree_id",
+                          "v": "ade661823cd9c4fb774080e32f6a67368aed3064"
+                        },
+                        {
+                          "k": "url",
+                          "v": "https://github.com/***-crypto/hw1/commit/137fcd561a249c3b18d27bf463f28957b6e5ca7a"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "k": "compare",
+                "v": "https://github.com/***-crypto/hw1/compare/2a1a601b8282...137fcd561a24"
+              },
+              {
+                "k": "created",
+                "v": false
+              },
+              {
+                "k": "deleted",
+                "v": false
+              },
+              {
+                "k": "forced",
+                "v": false
+              },
+              {
+                "k": "head_commit",
+                "v": {
+                  "t": 2,
+                  "d": [
+                    {
+                      "k": "author",
+                      "v": {
+                        "t": 2,
+                        "d": [
+                          {
+                            "k": "email",
+                            "v": "***@khu.ac.kr"
+                          },
+                          {
+                            "k": "name",
+                            "v": "***"
+                          },
+                          {
+                            "k": "username",
+                            "v": "***-crypto"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "k": "committer",
+                      "v": {
+                        "t": 2,
+                        "d": [
+                          {
+                            "k": "email",
+                            "v": "noreply@github.com"
+                          },
+                          {
+                            "k": "name",
+                            "v": "GitHub"
+                          },
+                          {
+                            "k": "username",
+                            "v": "web-flow"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "k": "distinct",
+                      "v": true
+                    },
+                    {
+                      "k": "id",
+                      "v": "137fcd561a249c3b18d27bf463f28957b6e5ca7a"
+                    },
+                    {
+                      "k": "message",
+                      "v": "Update ci.yml"
+                    },
+                    {
+                      "k": "timestamp",
+                      "v": "2026-04-08T22:07:57+09:00"
+                    },
+                    {
+                      "k": "tree_id",
+                      "v": "ade661823cd9c4fb774080e32f6a67368aed3064"
+                    },
+                    {
+                      "k": "url",
+                      "v": "https://github.com/***-crypto/hw1/commit/137fcd561a249c3b18d27bf463f28957b6e5ca7a"
+                    }
+                  ]
+                }
+              },
+              {
+                "k": "pusher",
+                "v": {
+                  "t": 2,
+                  "d": [
+                    {
+                      "k": "email",
+                      "v": "***@khu.ac.kr"
+                    },
+                    {
+                      "k": "name",
+                      "v": "***-crypto"
+                    }
+                  ]
+                }
+              },
+              {
+                "k": "ref",
+                "v": "refs/heads/main"
+              },
+              {
+                "k": "repository",
+                "v": {
+                  "t": 2,
+                  "d": [
+                    {
+                      "k": "allow_forking",
+                      "v": true
+                    },
+                    {
+                      "k": "archive_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/{archive_format}{/ref}"
+                    },
+                    {
+                      "k": "archived",
+                      "v": false
+                    },
+                    {
+                      "k": "assignees_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/assignees{/user}"
+                    },
+                    {
+                      "k": "blobs_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/git/blobs{/sha}"
+                    },
+                    {
+                      "k": "branches_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/branches{/branch}"
+                    },
+                    {
+                      "k": "clone_url",
+                      "v": "https://github.com/***-crypto/hw1.git"
+                    },
+                    {
+                      "k": "collaborators_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/collaborators{/collaborator}"
+                    },
+                    {
+                      "k": "comments_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/comments{/number}"
+                    },
+                    {
+                      "k": "commits_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/commits{/sha}"
+                    },
+                    {
+                      "k": "compare_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/compare/{base}...{head}"
+                    },
+                    {
+                      "k": "contents_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/contents/{+path}"
+                    },
+                    {
+                      "k": "contributors_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/contributors"
+                    },
+                    {
+                      "k": "created_at",
+                      "v": 1775610588.0
+                    },
+                    {
+                      "k": "default_branch",
+                      "v": "main"
+                    },
+                    {
+                      "k": "deployments_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/deployments"
+                    },
+                    {
+                      "k": "description",
+                      "v": null
+                    },
+                    {
+                      "k": "disabled",
+                      "v": false
+                    },
+                    {
+                      "k": "downloads_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/downloads"
+                    },
+                    {
+                      "k": "events_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/events"
+                    },
+                    {
+                      "k": "fork",
+                      "v": false
+                    },
+                    {
+                      "k": "forks",
+                      "v": 0.0
+                    },
+                    {
+                      "k": "forks_count",
+                      "v": 0.0
+                    },
+                    {
+                      "k": "forks_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/forks"
+                    },
+                    {
+                      "k": "full_name",
+                      "v": "***-crypto/hw1"
+                    },
+                    {
+                      "k": "git_commits_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/git/commits{/sha}"
+                    },
+                    {
+                      "k": "git_refs_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/git/refs{/sha}"
+                    },
+                    {
+                      "k": "git_tags_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/git/tags{/sha}"
+                    },
+                    {
+                      "k": "git_url",
+                      "v": "git://github.com/***-crypto/hw1.git"
+                    },
+                    {
+                      "k": "has_discussions",
+                      "v": false
+                    },
+                    {
+                      "k": "has_downloads",
+                      "v": true
+                    },
+                    {
+                      "k": "has_issues",
+                      "v": true
+                    },
+                    {
+                      "k": "has_pages",
+                      "v": false
+                    },
+                    {
+                      "k": "has_projects",
+                      "v": true
+                    },
+                    {
+                      "k": "has_pull_requests",
+                      "v": true
+                    },
+                    {
+                      "k": "has_wiki",
+                      "v": true
+                    },
+                    {
+                      "k": "homepage",
+                      "v": null
+                    },
+                    {
+                      "k": "hooks_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/hooks"
+                    },
+                    {
+                      "k": "html_url",
+                      "v": "https://github.com/***-crypto/hw1"
+                    },
+                    {
+                      "k": "id",
+                      "v": 1204394190.0
+                    },
+                    {
+                      "k": "is_template",
+                      "v": false
+                    },
+                    {
+                      "k": "issue_comment_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/issues/comments{/number}"
+                    },
+                    {
+                      "k": "issue_events_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/issues/events{/number}"
+                    },
+                    {
+                      "k": "issues_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/issues{/number}"
+                    },
+                    {
+                      "k": "keys_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/keys{/key_id}"
+                    },
+                    {
+                      "k": "labels_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/labels{/name}"
+                    },
+                    {
+                      "k": "language",
+                      "v": "JavaScript"
+                    },
+                    {
+                      "k": "languages_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/languages"
+                    },
+                    {
+                      "k": "license",
+                      "v": null
+                    },
+                    {
+                      "k": "master_branch",
+                      "v": "main"
+                    },
+                    {
+                      "k": "merges_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/merges"
+                    },
+                    {
+                      "k": "milestones_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/milestones{/number}"
+                    },
+                    {
+                      "k": "mirror_url",
+                      "v": null
+                    },
+                    {
+                      "k": "name",
+                      "v": "hw1"
+                    },
+                    {
+                      "k": "node_id",
+                      "v": "R_kgDOR8mYzg"
+                    },
+                    {
+                      "k": "notifications_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/notifications{?since,all,participating}"
+                    },
+                    {
+                      "k": "open_issues",
+                      "v": 0.0
+                    },
+                    {
+                      "k": "open_issues_count",
+                      "v": 0.0
+                    },
+                    {
+                      "k": "owner",
+                      "v": {
+                        "t": 2,
+                        "d": [
+                          {
+                            "k": "avatar_url",
+                            "v": "https://avatars.githubusercontent.com/u/268301902?v=4"
+                          },
+                          {
+                            "k": "email",
+                            "v": "***@khu.ac.kr"
+                          },
+                          {
+                            "k": "events_url",
+                            "v": "https://api.github.com/users/***-crypto/events{/privacy}"
+                          },
+                          {
+                            "k": "followers_url",
+                            "v": "https://api.github.com/users/***-crypto/followers"
+                          },
+                          {
+                            "k": "following_url",
+                            "v": "https://api.github.com/users/***-crypto/following{/other_user}"
+                          },
+                          {
+                            "k": "gists_url",
+                            "v": "https://api.github.com/users/***-crypto/gists{/gist_id}"
+                          },
+                          {
+                            "k": "gravatar_id",
+                            "v": ""
+                          },
+                          {
+                            "k": "html_url",
+                            "v": "https://github.com/***-crypto"
+                          },
+                          {
+                            "k": "id",
+                            "v": 268301902.0
+                          },
+                          {
+                            "k": "login",
+                            "v": "***-crypto"
+                          },
+                          {
+                            "k": "name",
+                            "v": "***-crypto"
+                          },
+                          {
+                            "k": "node_id",
+                            "v": "U_kgDOD_32Tg"
+                          },
+                          {
+                            "k": "organizations_url",
+                            "v": "https://api.github.com/users/***-crypto/orgs"
+                          },
+                          {
+                            "k": "received_events_url",
+                            "v": "https://api.github.com/users/***-crypto/received_events"
+                          },
+                          {
+                            "k": "repos_url",
+                            "v": "https://api.github.com/users/***-crypto/repos"
+                          },
+                          {
+                            "k": "site_admin",
+                            "v": false
+                          },
+                          {
+                            "k": "starred_url",
+                            "v": "https://api.github.com/users/***-crypto/starred{/owner}{/repo}"
+                          },
+                          {
+                            "k": "subscriptions_url",
+                            "v": "https://api.github.com/users/***-crypto/subscriptions"
+                          },
+                          {
+                            "k": "type",
+                            "v": "User"
+                          },
+                          {
+                            "k": "url",
+                            "v": "https://api.github.com/users/***-crypto"
+                          },
+                          {
+                            "k": "user_view_type",
+                            "v": "public"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "k": "private",
+                      "v": false
+                    },
+                    {
+                      "k": "pull_request_creation_policy",
+                      "v": "all"
+                    },
+                    {
+                      "k": "pulls_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/pulls{/number}"
+                    },
+                    {
+                      "k": "pushed_at",
+                      "v": 1775653677.0
+                    },
+                    {
+                      "k": "releases_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/releases{/id}"
+                    },
+                    {
+                      "k": "size",
+                      "v": 2.0
+                    },
+                    {
+                      "k": "ssh_url",
+                      "v": "git@github.com:***-crypto/hw1.git"
+                    },
+                    {
+                      "k": "stargazers",
+                      "v": 0.0
+                    },
+                    {
+                      "k": "stargazers_count",
+                      "v": 0.0
+                    },
+                    {
+                      "k": "stargazers_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/stargazers"
+                    },
+                    {
+                      "k": "statuses_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/statuses/{sha}"
+                    },
+                    {
+                      "k": "subscribers_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/subscribers"
+                    },
+                    {
+                      "k": "subscription_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/subscription"
+                    },
+                    {
+                      "k": "svn_url",
+                      "v": "https://github.com/***-crypto/hw1"
+                    },
+                    {
+                      "k": "tags_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/tags"
+                    },
+                    {
+                      "k": "teams_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/teams"
+                    },
+                    {
+                      "k": "topics",
+                      "v": {
+                        "t": 1
+                      }
+                    },
+                    {
+                      "k": "trees_url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1/git/trees{/sha}"
+                    },
+                    {
+                      "k": "updated_at",
+                      "v": "2026-04-08T13:05:34Z"
+                    },
+                    {
+                      "k": "url",
+                      "v": "https://api.github.com/repos/***-crypto/hw1"
+                    },
+                    {
+                      "k": "visibility",
+                      "v": "public"
+                    },
+                    {
+                      "k": "watchers",
+                      "v": 0.0
+                    },
+                    {
+                      "k": "watchers_count",
+                      "v": 0.0
+                    },
+                    {
+                      "k": "web_commit_signoff_required",
+                      "v": false
+                    }
+                  ]
+                }
+              },
+              {
+                "k": "sender",
+                "v": {
+                  "t": 2,
+                  "d": [
+                    {
+                      "k": "avatar_url",
+                      "v": "https://avatars.githubusercontent.com/u/268301902?v=4"
+                    },
+                    {
+                      "k": "events_url",
+                      "v": "https://api.github.com/users/***-crypto/events{/privacy}"
+                    },
+                    {
+                      "k": "followers_url",
+                      "v": "https://api.github.com/users/***-crypto/followers"
+                    },
+                    {
+                      "k": "following_url",
+                      "v": "https://api.github.com/users/***-crypto/following{/other_user}"
+                    },
+                    {
+                      "k": "gists_url",
+                      "v": "https://api.github.com/users/***-crypto/gists{/gist_id}"
+                    },
+                    {
+                      "k": "gravatar_id",
+                      "v": ""
+                    },
+                    {
+                      "k": "html_url",
+                      "v": "https://github.com/***-crypto"
+                    },
+                    {
+                      "k": "id",
+                      "v": 268301902.0
+                    },
+                    {
+                      "k": "login",
+                      "v": "***-crypto"
+                    },
+                    {
+                      "k": "node_id",
+                      "v": "U_kgDOD_32Tg"
+                    },
+                    {
+                      "k": "organizations_url",
+                      "v": "https://api.github.com/users/***-crypto/orgs"
+                    },
+                    {
+                      "k": "received_events_url",
+                      "v": "https://api.github.com/users/***-crypto/received_events"
+                    },
+                    {
+                      "k": "repos_url",
+                      "v": "https://api.github.com/users/***-crypto/repos"
+                    },
+                    {
+                      "k": "site_admin",
+                      "v": false
+                    },
+                    {
+                      "k": "starred_url",
+                      "v": "https://api.github.com/users/***-crypto/starred{/owner}{/repo}"
+                    },
+                    {
+                      "k": "subscriptions_url",
+                      "v": "https://api.github.com/users/***-crypto/subscriptions"
+                    },
+                    {
+                      "k": "type",
+                      "v": "User"
+                    },
+                    {
+                      "k": "url",
+                      "v": "https://api.github.com/users/***-crypto"
+                    },
+                    {
+                      "k": "user_view_type",
+                      "v": "public"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "k": "workflow_ref",
+          "v": "***-crypto/hw1/.github/workflows/ci.yml@refs/heads/main"
+        },
+        {
+          "k": "workflow_sha",
+          "v": "137fcd561a249c3b18d27bf463f28957b6e5ca7a"
+        },
+        {
+          "k": "repository_id",
+          "v": "1204394190"
+        },
+        {
+          "k": "triggering_actor",
+          "v": "***-crypto"
+        }
+      ]
+    },
+    "inputs": {
+      "t": 2
+    },
+    "job": {
+      "t": 2,
+      "d": [
+        {
+          "k": "check_run_id",
+          "v": 70427802810.0
+        }
+      ]
+    },
+    "matrix": null,
+    "needs": {
+      "t": 2,
+      "d": [
+        {
+          "k": "docker",
+          "v": {
+            "t": 2,
+            "d": [
+              {
+                "k": "result",
+                "v": "success"
+              },
+              {
+                "k": "outputs",
+                "v": {
+                  "t": 2,
+                  "d": [
+                    {
+                      "k": "image_tag",
+                      "v": "latest"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "strategy": {
+      "t": 2,
+      "d": [
+        {
+          "k": "fail-fast",
+          "v": true
+        },
+        {
+          "k": "job-index",
+          "v": 0.0
+        },
+        {
+          "k": "job-total",
+          "v": 1.0
+        },
+        {
+          "k": "max-parallel",
+          "v": 1.0
+        }
+      ]
+    },
+    "vars": {
+      "t": 2
+    }
+  },
+  "billingOwnerId": "U_kgDOD_32Tg"
+}
+[2026-04-08 13:08:32Z INFO JobRunner] Job ID 445ae2bf-57f9-52b9-b743-916f1f1cc265
+[2026-04-08 13:08:32Z INFO ConfigurationStore] currentAssemblyLocation: C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin\Runner.Worker.dll
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:32Z INFO ConfigurationStore] binPath: C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:32Z INFO ConfigurationStore] RootFolder: C:\Users\user\OneDrive\바탕 화면\at-dog-api
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:32Z INFO HostContext] Well known config file 'Runner': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\.runner'
+[2026-04-08 13:08:32Z INFO ConfigurationStore] ConfigFilePath: C:\Users\user\OneDrive\바탕 화면\at-dog-api\.runner
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:32Z INFO HostContext] Well known config file 'MigratedRunner': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\.runner_migrated'
+[2026-04-08 13:08:32Z INFO ConfigurationStore] MigratedConfigFilePath: C:\Users\user\OneDrive\바탕 화면\at-dog-api\.runner_migrated
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:32Z INFO HostContext] Well known config file 'Credentials': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\.credentials'
+[2026-04-08 13:08:32Z INFO ConfigurationStore] CredFilePath: C:\Users\user\OneDrive\바탕 화면\at-dog-api\.credentials
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:32Z INFO HostContext] Well known config file 'MigratedCredentials': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\.credentials_migrated'
+[2026-04-08 13:08:32Z INFO ConfigurationStore] MigratedCredFilePath: C:\Users\user\OneDrive\바탕 화면\at-dog-api\.credentials_migrated
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:32Z INFO HostContext] Well known config file 'Service': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\.service'
+[2026-04-08 13:08:32Z INFO ConfigurationStore] ServiceConfigFilePath: C:\Users\user\OneDrive\바탕 화면\at-dog-api\.service
+[2026-04-08 13:08:32Z INFO ConfigurationStore] Read setting file: 397 chars
+[2026-04-08 13:08:32Z INFO JobRunner] Initializing launch client
+[2026-04-08 13:08:32Z INFO JobServerQueue] Initializing results client
+[2026-04-08 13:08:32Z INFO ResultServer] Creating websocket client ...wss://results-receiver.actions.githubusercontent.com/_ws/ingest.sock
+[2026-04-08 13:08:32Z INFO ResultServer] Attempting to start websocket client with delay 00:00:00.
+[2026-04-08 13:08:32Z INFO JobServerQueue] Start process web console line queue.
+[2026-04-08 13:08:32Z INFO JobServerQueue] Start process file upload queue.
+[2026-04-08 13:08:32Z INFO JobServerQueue] Start results file upload queue.
+[2026-04-08 13:08:32Z INFO JobServerQueue] Starting results-based upload queue...
+[2026-04-08 13:08:32Z INFO JobServerQueue] Start process timeline update queue.
+[2026-04-08 13:08:32Z INFO ExecutionContext] Initializing Job context
+[2026-04-08 13:08:32Z INFO ExecutionContext] Initialize GitHub context
+[2026-04-08 13:08:32Z INFO ExecutionContext] Initialize Env context
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Diag': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_diag'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Diag': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_diag'
+[2026-04-08 13:08:32Z INFO JobRunner] Starting the job execution context.
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Work': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:32Z INFO JobRunner] Validating directory permissions for: 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Work': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Tools': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_tool'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Work': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Temp': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_temp'
+[2026-04-08 13:08:32Z INFO JobRunner] Getting job extension.
+[2026-04-08 13:08:32Z INFO JobRunner] Initialize job. Getting all job steps.
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Diag': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_diag'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Diag': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_diag'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:32Z INFO HostContext] Well known config file 'Credentials': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\.credentials'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:32Z INFO HostContext] Well known config file 'SetupInfo': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\.setup_info'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Work': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:32Z INFO PipelineDirectoryManager] Loading tracking config if exists: C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_PipelineMapping\***-crypto/hw1\PipelineFolder.json
+[2026-04-08 13:08:32Z INFO PipelineDirectoryManager] Updating job run properties.
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Work': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Work': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Work': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:32Z INFO JobExtension] Downloading actions
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Work': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:32Z INFO HostContext] Well known directory 'Actions': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_actions'
+[2026-04-08 13:08:32Z INFO Worker] Listening for cancel message from the channel.
+[2026-04-08 13:08:32Z INFO Worker] Waiting for the job to complete or for a cancel message from the channel.
+[2026-04-08 13:08:33Z INFO ResultServer] Successfully started websocket client.
+[2026-04-08 13:08:33Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'ec27eaf0-fc9a-4f30-87fe-861ef6ed4b80', success rate: 1/1.
+[2026-04-08 13:08:33Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:33Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:33Z INFO HostContext] Well known directory 'Work': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:33Z INFO HostContext] Well known directory 'Actions': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_actions'
+[2026-04-08 13:08:33Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:33Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:33Z INFO HostContext] Well known directory 'Work': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:33Z INFO HostContext] Well known directory 'Actions': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_actions'
+[2026-04-08 13:08:33Z INFO ActionManager] Save archive 'https://api.github.com/repos/docker/login-action/zipball/c94ce9fb468520275223c153574b00df6fe4bcc9' into C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_actions\_temp_c41e939f-16c4-4573-840a-24d72c0199b5\ccb90cb6-d613-4db8-8a5e-cd9a2612c673.zip.
+[2026-04-08 13:08:33Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'ec27eaf0-fc9a-4f30-87fe-861ef6ed4b80', success rate: 1/1.
+[2026-04-08 13:08:33Z INFO JobServerQueue] Job timeline record has been updated for the first time.
+[2026-04-08 13:08:35Z INFO ActionManager] Request URL: https://api.github.com/repos/docker/login-action/zipball/c94ce9fb468520275223c153574b00df6fe4bcc9 X-GitHub-Request-Id: F257:28A90C:6B93:3916E:69D65352 Http Status: OK
+[2026-04-08 13:08:36Z INFO ActionManager] Finished getting action repository.
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Work': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Actions': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_actions'
+[2026-04-08 13:08:36Z INFO ActionManifestManagerLegacy] Load schema file with definitions: [
+  "null",
+  "boolean",
+  "number",
+  "string",
+  "sequence",
+  "mapping",
+  "any",
+  "action-root",
+  "inputs",
+  "input",
+  "outputs",
+  "output-definition",
+  "runs",
+  "container-runs",
+  "container-runs-args",
+  "container-runs-env",
+  "node-runs",
+  "plugin-runs",
+  "composite-runs",
+  "composite-steps",
+  "composite-step",
+  "run-step",
+  "uses-step",
+  "container-runs-context",
+  "output-value",
+  "input-default-context",
+  "non-empty-string",
+  "string-steps-context",
+  "boolean-steps-context",
+  "step-env",
+  "step-if",
+  "step-with"
+]
+[2026-04-08 13:08:36Z INFO ActionManifestManager] Load schema file with definitions: [
+  "null",
+  "boolean",
+  "number",
+  "string",
+  "sequence",
+  "mapping",
+  "any",
+  "action-root",
+  "inputs",
+  "input",
+  "outputs",
+  "output-definition",
+  "runs",
+  "container-runs",
+  "container-runs-args",
+  "container-runs-env",
+  "node-runs",
+  "plugin-runs",
+  "composite-runs",
+  "composite-steps",
+  "composite-step",
+  "run-step",
+  "uses-step",
+  "container-runs-context",
+  "output-value",
+  "input-default-context",
+  "non-empty-string",
+  "string-steps-context",
+  "boolean-steps-context",
+  "step-env",
+  "step-if",
+  "step-with"
+]
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Work': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Actions': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_actions'
+[2026-04-08 13:08:36Z INFO ActionManifestManagerLegacy] Ignore action property author.
+[2026-04-08 13:08:36Z INFO ActionManifestManagerLegacy] Ignore action property branding.
+[2026-04-08 13:08:36Z INFO ActionManifestManagerLegacy] Loaded action.yml file: {
+  "name": "Docker Login",
+  "description": "GitHub Action to login against a Docker registry",
+  "inputs": {
+    "type": 2,
+    "map": [
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 10,
+          "col": 3,
+          "lit": "registry"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 13,
+          "col": 3,
+          "lit": "username"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 16,
+          "col": 3,
+          "lit": "password"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 19,
+          "col": 3,
+          "lit": "ecr"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 22,
+          "col": 3,
+          "lit": "scope"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 25,
+          "col": 3,
+          "lit": "logout"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 27,
+          "col": 14,
+          "lit": "true"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 29,
+          "col": 3,
+          "lit": "registry-auth"
+        },
+        "value": ""
+      }
+    ]
+  },
+  "execution": {
+    "executionType": "nodeJS",
+    "hasPre": false,
+    "hasPost": true,
+    "script": "dist/index.js",
+    "pre": null,
+    "post": "dist/index.js",
+    "nodeVersion": "node20",
+    "cleanupCondition": "always()",
+    "initCondition": "always()"
+  },
+  "deprecated": null
+}
+[2026-04-08 13:08:36Z INFO ActionManager] Action node.js file: dist/index.js, no more preparation.
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Work': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Actions': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_actions'
+[2026-04-08 13:08:36Z INFO ActionManager] Load action that reference repository from 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_actions\docker\login-action\v3'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Work': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Actions': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_actions'
+[2026-04-08 13:08:36Z INFO ActionManifestManagerLegacy] Ignore action property author.
+[2026-04-08 13:08:36Z INFO ActionManifestManagerLegacy] Ignore action property branding.
+[2026-04-08 13:08:36Z INFO ActionManifestManagerLegacy] Loaded action.yml file: {
+  "name": "Docker Login",
+  "description": "GitHub Action to login against a Docker registry",
+  "inputs": {
+    "type": 2,
+    "map": [
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 10,
+          "col": 3,
+          "lit": "registry"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 13,
+          "col": 3,
+          "lit": "username"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 16,
+          "col": 3,
+          "lit": "password"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 19,
+          "col": 3,
+          "lit": "ecr"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 22,
+          "col": 3,
+          "lit": "scope"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 25,
+          "col": 3,
+          "lit": "logout"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 27,
+          "col": 14,
+          "lit": "true"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 29,
+          "col": 3,
+          "lit": "registry-auth"
+        },
+        "value": ""
+      }
+    ]
+  },
+  "execution": {
+    "executionType": "nodeJS",
+    "hasPre": false,
+    "hasPost": true,
+    "script": "dist/index.js",
+    "pre": null,
+    "post": "dist/index.js",
+    "nodeVersion": "node20",
+    "cleanupCondition": "always()",
+    "initCondition": "always()"
+  },
+  "deprecated": null
+}
+[2026-04-08 13:08:36Z INFO ActionManager] Action pre node.js file: N/A.
+[2026-04-08 13:08:36Z INFO ActionManager] Action node.js file: dist/index.js.
+[2026-04-08 13:08:36Z INFO ActionManager] Action post node.js file: dist/index.js.
+[2026-04-08 13:08:36Z INFO JobExtension] Adding .
+[2026-04-08 13:08:36Z INFO JobExtension] Adding .
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Diag': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_diag'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Diag': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_diag'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Diag': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_diag'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Diag': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_diag'
+[2026-04-08 13:08:36Z INFO JobExtension] Total accessible running process: 369.
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Work': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:36Z INFO JobExtension] Start checking server connectivity.
+[2026-04-08 13:08:36Z INFO JobExtension] Check server connectivity for https://broker.actions.githubusercontent.com/health.
+[2026-04-08 13:08:36Z INFO JobExtension] Check server connectivity for https://token.actions.githubusercontent.com/ready.
+[2026-04-08 13:08:36Z INFO JobExtension] Check server connectivity for https://run.actions.githubusercontent.com/health.
+[2026-04-08 13:08:36Z INFO JobExtension] Start checking service connectivity in background.
+[2026-04-08 13:08:36Z INFO ExecutionContext] Publish step telemetry for current step {
+  "action": "setup_job",
+  "type": "runner",
+  "stage": "Pre",
+  "stepId": "ec27eaf0-fc9a-4f30-87fe-861ef6ed4b80",
+  "result": "succeeded",
+  "errorMessages": [],
+  "executionTimeInSeconds": 5,
+  "startTime": "2026-04-08T13:08:32.2776349Z",
+  "finishTime": "2026-04-08T13:08:36.7569128Z"
+}.
+[2026-04-08 13:08:36Z INFO JobRunner] Total job steps: 2.
+[2026-04-08 13:08:36Z INFO JobRunner] Run all job steps.
+[2026-04-08 13:08:36Z INFO StepsRunner] Processing step: DisplayName='Log in to Docker Hub'
+[2026-04-08 13:08:36Z INFO StepsRunner] Evaluating: success()
+[2026-04-08 13:08:36Z INFO StepsRunner] Result: true
+[2026-04-08 13:08:36Z INFO StepsRunner] Starting the step.
+[2026-04-08 13:08:36Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'ec27eaf0-fc9a-4f30-87fe-861ef6ed4b80', success rate: 1/1.
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Work': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:36Z INFO StepsRunner] Which2: 'chcp'
+[2026-04-08 13:08:36Z INFO StepsRunner] Location: 'C:\WINDOWS\system32\chcp.COM'
+[2026-04-08 13:08:36Z INFO ProcessInvokerWrapper] Starting process:
+[2026-04-08 13:08:36Z INFO ProcessInvokerWrapper]   File name: 'C:\WINDOWS\system32\chcp.COM'
+[2026-04-08 13:08:36Z INFO ProcessInvokerWrapper]   Arguments: '65001'
+[2026-04-08 13:08:36Z INFO ProcessInvokerWrapper]   Working directory: 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:36Z INFO ProcessInvokerWrapper]   Require exit code zero: 'False'
+[2026-04-08 13:08:36Z INFO ProcessInvokerWrapper]   Encoding web name:  ; code page: ''
+[2026-04-08 13:08:36Z INFO ProcessInvokerWrapper]   Force kill process on cancellation: 'False'
+[2026-04-08 13:08:36Z INFO ProcessInvokerWrapper]   Redirected STDIN: 'False'
+[2026-04-08 13:08:36Z INFO ProcessInvokerWrapper]   Persist current code page: 'True'
+[2026-04-08 13:08:36Z INFO ProcessInvokerWrapper]   Keep redirected STDIN open: 'False'
+[2026-04-08 13:08:36Z INFO ProcessInvokerWrapper]   High priority process: 'False'
+[2026-04-08 13:08:36Z INFO ProcessInvokerWrapper] Process started with process id 25560, waiting for process exit.
+[2026-04-08 13:08:36Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2026-04-08 13:08:36Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2026-04-08 13:08:36Z INFO ProcessInvokerWrapper] Finished process 25560 with exit code 0, and elapsed time 00:00:00.0643811.
+[2026-04-08 13:08:36Z INFO StepsRunner] Successfully returned to code page 65001 (UTF8)
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Work': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Actions': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_actions'
+[2026-04-08 13:08:36Z INFO ActionManager] Load action that reference repository from 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_actions\docker\login-action\v3'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Work': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Actions': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_actions'
+[2026-04-08 13:08:36Z INFO ActionManifestManagerLegacy] Ignore action property author.
+[2026-04-08 13:08:36Z INFO ActionManifestManagerLegacy] Ignore action property branding.
+[2026-04-08 13:08:36Z INFO ActionManifestManagerLegacy] Loaded action.yml file: {
+  "name": "Docker Login",
+  "description": "GitHub Action to login against a Docker registry",
+  "inputs": {
+    "type": 2,
+    "map": [
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 10,
+          "col": 3,
+          "lit": "registry"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 13,
+          "col": 3,
+          "lit": "username"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 16,
+          "col": 3,
+          "lit": "password"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 19,
+          "col": 3,
+          "lit": "ecr"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 22,
+          "col": 3,
+          "lit": "scope"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 25,
+          "col": 3,
+          "lit": "logout"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 27,
+          "col": 14,
+          "lit": "true"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 29,
+          "col": 3,
+          "lit": "registry-auth"
+        },
+        "value": ""
+      }
+    ]
+  },
+  "execution": {
+    "executionType": "nodeJS",
+    "hasPre": false,
+    "hasPost": true,
+    "script": "dist/index.js",
+    "pre": null,
+    "post": "dist/index.js",
+    "nodeVersion": "node20",
+    "cleanupCondition": "always()",
+    "initCondition": "always()"
+  },
+  "deprecated": null
+}
+[2026-04-08 13:08:36Z INFO ActionManager] Action pre node.js file: N/A.
+[2026-04-08 13:08:36Z INFO ActionManager] Action node.js file: dist/index.js.
+[2026-04-08 13:08:36Z INFO ActionManager] Action post node.js file: dist/index.js.
+[2026-04-08 13:08:36Z INFO ExecutionContext] Reserve record order 4 to 6 for post job actions.
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Diag': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_diag'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Diag': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_diag'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Work': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Temp': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_temp'
+[2026-04-08 13:08:36Z INFO ExecutionContext] Write event payload to C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_temp\_github_workflow\event.json
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Work': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Temp': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_temp'
+[2026-04-08 13:08:36Z INFO ExtensionManager] Getting extensions for interface: 'GitHub.Runner.Worker.IFileCommandExtension'
+[2026-04-08 13:08:36Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.AddPathFileCommand, Runner.Worker
+[2026-04-08 13:08:36Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.SetEnvFileCommand, Runner.Worker
+[2026-04-08 13:08:36Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.CreateStepSummaryCommand, Runner.Worker
+[2026-04-08 13:08:36Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.SaveStateFileCommand, Runner.Worker
+[2026-04-08 13:08:36Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.SetOutputFileCommand, Runner.Worker
+[2026-04-08 13:08:36Z INFO ActionManifestManagerLegacy] Input 'registry': default value evaluate result: ""
+[2026-04-08 13:08:36Z INFO ActionManifestManagerLegacy] Input 'ecr': default value evaluate result: ""
+[2026-04-08 13:08:36Z INFO ActionManifestManagerLegacy] Input 'scope': default value evaluate result: ""
+[2026-04-08 13:08:36Z INFO ActionManifestManagerLegacy] Input 'logout': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 27,
+  "col": 14,
+  "lit": "true"
+}
+[2026-04-08 13:08:36Z INFO ActionManifestManagerLegacy] Input 'registry-auth': default value evaluate result: ""
+[2026-04-08 13:08:36Z INFO ExtensionManager] Getting extensions for interface: 'GitHub.Runner.Worker.IActionCommandExtension'
+[2026-04-08 13:08:36Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.InternalPluginSetRepoPathCommandExtension, Runner.Worker
+[2026-04-08 13:08:36Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.SetEnvCommandExtension, Runner.Worker
+[2026-04-08 13:08:36Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.SetOutputCommandExtension, Runner.Worker
+[2026-04-08 13:08:36Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.SaveStateCommandExtension, Runner.Worker
+[2026-04-08 13:08:36Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.AddPathCommandExtension, Runner.Worker
+[2026-04-08 13:08:36Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.AddMaskCommandExtension, Runner.Worker
+[2026-04-08 13:08:36Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.AddMatcherCommandExtension, Runner.Worker
+[2026-04-08 13:08:36Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.RemoveMatcherCommandExtension, Runner.Worker
+[2026-04-08 13:08:36Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.WarningCommandExtension, Runner.Worker
+[2026-04-08 13:08:36Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.ErrorCommandExtension, Runner.Worker
+[2026-04-08 13:08:36Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.NoticeCommandExtension, Runner.Worker
+[2026-04-08 13:08:36Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.DebugCommandExtension, Runner.Worker
+[2026-04-08 13:08:36Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.GroupCommandExtension, Runner.Worker
+[2026-04-08 13:08:36Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.EndGroupCommandExtension, Runner.Worker
+[2026-04-08 13:08:36Z INFO ExtensionManager] Creating instance: GitHub.Runner.Worker.EchoCommandExtension, Runner.Worker
+[2026-04-08 13:08:36Z INFO ActionCommandManager] Register action command extension for command internal-set-repo-path
+[2026-04-08 13:08:36Z INFO ActionCommandManager] Register action command extension for command set-env
+[2026-04-08 13:08:36Z INFO ActionCommandManager] Register action command extension for command set-output
+[2026-04-08 13:08:36Z INFO ActionCommandManager] Register action command extension for command save-state
+[2026-04-08 13:08:36Z INFO ActionCommandManager] Register action command extension for command add-path
+[2026-04-08 13:08:36Z INFO ActionCommandManager] Register action command extension for command add-mask
+[2026-04-08 13:08:36Z INFO ActionCommandManager] Register action command extension for command add-matcher
+[2026-04-08 13:08:36Z INFO ActionCommandManager] Register action command extension for command remove-matcher
+[2026-04-08 13:08:36Z INFO ActionCommandManager] Register action command extension for command warning
+[2026-04-08 13:08:36Z INFO ActionCommandManager] Register action command extension for command error
+[2026-04-08 13:08:36Z INFO ActionCommandManager] Register action command extension for command notice
+[2026-04-08 13:08:36Z INFO ActionCommandManager] Register action command extension for command debug
+[2026-04-08 13:08:36Z INFO ActionCommandManager] Register action command extension for command group
+[2026-04-08 13:08:36Z INFO ActionCommandManager] Register action command extension for command endgroup
+[2026-04-08 13:08:36Z INFO ActionCommandManager] Register action command extension for command echo
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:36Z INFO HostContext] Well known directory 'Externals': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\externals'
+[2026-04-08 13:08:36Z INFO ProcessInvokerWrapper] Starting process:
+[2026-04-08 13:08:36Z INFO ProcessInvokerWrapper]   File name: 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\externals\node20\bin\node.exe'
+[2026-04-08 13:08:36Z INFO ProcessInvokerWrapper]   Arguments: '"C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_actions\docker\login-action\v3\dist/index.js"'
+[2026-04-08 13:08:36Z INFO ProcessInvokerWrapper]   Working directory: 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\hw1\hw1'
+[2026-04-08 13:08:36Z INFO ProcessInvokerWrapper]   Require exit code zero: 'False'
+[2026-04-08 13:08:36Z INFO ProcessInvokerWrapper]   Encoding web name: utf-8 ; code page: '65001'
+[2026-04-08 13:08:36Z INFO ProcessInvokerWrapper]   Force kill process on cancellation: 'False'
+[2026-04-08 13:08:36Z INFO ProcessInvokerWrapper]   Redirected STDIN: 'False'
+[2026-04-08 13:08:36Z INFO ProcessInvokerWrapper]   Persist current code page: 'True'
+[2026-04-08 13:08:36Z INFO ProcessInvokerWrapper]   Keep redirected STDIN open: 'False'
+[2026-04-08 13:08:36Z INFO ProcessInvokerWrapper]   High priority process: 'False'
+[2026-04-08 13:08:36Z INFO ProcessInvokerWrapper] Process started with process id 10428, waiting for process exit.
+[2026-04-08 13:08:37Z INFO JobServerQueue] Try to append 1 batches web console lines for record '9cc54c74-3099-49d7-bc31-a5f5d5e3646d', success rate: 1/1.
+[2026-04-08 13:08:37Z INFO JobServerQueue] Got a step log file to send to results service.
+[2026-04-08 13:08:37Z INFO JobServerQueue] Starting upload of step log file to results service ResultsLog, C:\Users\user\OneDrive\바탕 화면\at-dog-api\_diag\blocks\278c19f6-538a-4054-9504-dff52f0f23fd_ec27eaf0-fc9a-4f30-87fe-861ef6ed4b80.1
+[2026-04-08 13:08:37Z INFO JobServerQueue] Try to upload 1 log files or attachments, success rate: 1/1.
+[2026-04-08 13:08:37Z INFO JobServerQueue] Try to append 1 batches web console lines for record '9cc54c74-3099-49d7-bc31-a5f5d5e3646d', success rate: 1/1.
+[2026-04-08 13:08:39Z INFO JobServerQueue] Tried to upload 1 file(s) to results, success rate: 1/1.
+[2026-04-08 13:08:41Z INFO JobServerQueue] Try to append 1 batches web console lines for record '9cc54c74-3099-49d7-bc31-a5f5d5e3646d', success rate: 1/1.
+[2026-04-08 13:08:41Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2026-04-08 13:08:41Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2026-04-08 13:08:41Z INFO ProcessInvokerWrapper] Finished process 10428 with exit code 0, and elapsed time 00:00:05.0103140.
+[2026-04-08 13:08:41Z INFO CreateStepSummaryCommand] Step Summary file (C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_temp\_runner_file_commands\step_summary_39542531-1fdd-4c36-892d-a5000bc4e92f) is empty; skipping attachment upload
+[2026-04-08 13:08:41Z INFO StepsRunner] Step result: 
+[2026-04-08 13:08:41Z INFO ExecutionContext] Publish step telemetry for current step {
+  "action": "docker/login-action",
+  "ref": "v3",
+  "type": "node20",
+  "stage": "Main",
+  "stepId": "9cc54c74-3099-49d7-bc31-a5f5d5e3646d",
+  "stepContextName": "__docker_login-action",
+  "hasPreStep": false,
+  "hasPostStep": true,
+  "result": "succeeded",
+  "errorMessages": [],
+  "executionTimeInSeconds": 6,
+  "startTime": "2026-04-08T13:08:36.7725433Z",
+  "finishTime": "2026-04-08T13:08:41.9586105Z"
+}.
+[2026-04-08 13:08:41Z INFO StepsRunner] No need for updating job result with current step result 'Succeeded'.
+[2026-04-08 13:08:41Z INFO StepsRunner] Current state: job state = ''
+[2026-04-08 13:08:41Z INFO StepsRunner] Processing step: DisplayName='Pull latest image and Restart container'
+[2026-04-08 13:08:41Z INFO StepsRunner] Evaluating: success()
+[2026-04-08 13:08:41Z INFO StepsRunner] Result: true
+[2026-04-08 13:08:41Z INFO StepsRunner] Starting the step.
+[2026-04-08 13:08:41Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:41Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:41Z INFO HostContext] Well known directory 'Work': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:41Z INFO StepsRunner] Which2: 'chcp'
+[2026-04-08 13:08:41Z INFO StepsRunner] Location: 'C:\WINDOWS\system32\chcp.COM'
+[2026-04-08 13:08:41Z INFO ProcessInvokerWrapper] Starting process:
+[2026-04-08 13:08:41Z INFO ProcessInvokerWrapper]   File name: 'C:\WINDOWS\system32\chcp.COM'
+[2026-04-08 13:08:41Z INFO ProcessInvokerWrapper]   Arguments: '65001'
+[2026-04-08 13:08:41Z INFO ProcessInvokerWrapper]   Working directory: 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:41Z INFO ProcessInvokerWrapper]   Require exit code zero: 'False'
+[2026-04-08 13:08:41Z INFO ProcessInvokerWrapper]   Encoding web name:  ; code page: ''
+[2026-04-08 13:08:41Z INFO ProcessInvokerWrapper]   Force kill process on cancellation: 'False'
+[2026-04-08 13:08:41Z INFO ProcessInvokerWrapper]   Redirected STDIN: 'False'
+[2026-04-08 13:08:41Z INFO ProcessInvokerWrapper]   Persist current code page: 'True'
+[2026-04-08 13:08:41Z INFO ProcessInvokerWrapper]   Keep redirected STDIN open: 'False'
+[2026-04-08 13:08:41Z INFO ProcessInvokerWrapper]   High priority process: 'False'
+[2026-04-08 13:08:41Z INFO ProcessInvokerWrapper] Process started with process id 6692, waiting for process exit.
+[2026-04-08 13:08:41Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2026-04-08 13:08:41Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2026-04-08 13:08:41Z INFO ProcessInvokerWrapper] Finished process 6692 with exit code 0, and elapsed time 00:00:00.0175731.
+[2026-04-08 13:08:41Z INFO StepsRunner] Successfully returned to code page 65001 (UTF8)
+[2026-04-08 13:08:41Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:41Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:41Z INFO HostContext] Well known directory 'Work': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:41Z INFO HostContext] Well known directory 'Temp': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_temp'
+[2026-04-08 13:08:41Z INFO ExecutionContext] Write event payload to C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_temp\_github_workflow\event.json
+[2026-04-08 13:08:41Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:41Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:41Z INFO HostContext] Well known directory 'Work': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:41Z INFO HostContext] Well known directory 'Temp': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_temp'
+[2026-04-08 13:08:41Z INFO ExtensionManager] Getting extensions for interface: 'GitHub.Runner.Worker.IFileCommandExtension'
+[2026-04-08 13:08:41Z INFO ExtensionManager] Getting extensions for interface: 'GitHub.Runner.Worker.IActionCommandExtension'
+[2026-04-08 13:08:41Z INFO ActionCommandManager] Register action command extension for command internal-set-repo-path
+[2026-04-08 13:08:41Z INFO ActionCommandManager] Register action command extension for command set-env
+[2026-04-08 13:08:41Z INFO ActionCommandManager] Register action command extension for command set-output
+[2026-04-08 13:08:41Z INFO ActionCommandManager] Register action command extension for command save-state
+[2026-04-08 13:08:41Z INFO ActionCommandManager] Register action command extension for command add-path
+[2026-04-08 13:08:41Z INFO ActionCommandManager] Register action command extension for command add-mask
+[2026-04-08 13:08:41Z INFO ActionCommandManager] Register action command extension for command add-matcher
+[2026-04-08 13:08:41Z INFO ActionCommandManager] Register action command extension for command remove-matcher
+[2026-04-08 13:08:41Z INFO ActionCommandManager] Register action command extension for command warning
+[2026-04-08 13:08:41Z INFO ActionCommandManager] Register action command extension for command error
+[2026-04-08 13:08:41Z INFO ActionCommandManager] Register action command extension for command notice
+[2026-04-08 13:08:41Z INFO ActionCommandManager] Register action command extension for command debug
+[2026-04-08 13:08:41Z INFO ActionCommandManager] Register action command extension for command group
+[2026-04-08 13:08:41Z INFO ActionCommandManager] Register action command extension for command endgroup
+[2026-04-08 13:08:41Z INFO ActionCommandManager] Register action command extension for command echo
+[2026-04-08 13:08:41Z INFO ScriptHandler] Which2: 'powershell'
+[2026-04-08 13:08:42Z INFO ScriptHandler] Location: 'C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.EXE'
+[2026-04-08 13:08:42Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:42Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:42Z INFO HostContext] Well known directory 'Work': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:42Z INFO HostContext] Well known directory 'Temp': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_temp'
+[2026-04-08 13:08:42Z INFO ScriptHandler] Which2: 'powershell'
+[2026-04-08 13:08:42Z INFO ScriptHandler] Location: 'C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.EXE'
+[2026-04-08 13:08:42Z INFO ProcessInvokerWrapper] Starting process:
+[2026-04-08 13:08:42Z INFO ProcessInvokerWrapper]   File name: 'C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.EXE'
+[2026-04-08 13:08:42Z INFO ProcessInvokerWrapper]   Arguments: '-command ". 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_temp\1aaf3fc8-4ae7-4d3e-8574-563782749c43.ps1'"'
+[2026-04-08 13:08:42Z INFO ProcessInvokerWrapper]   Working directory: 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\hw1\hw1'
+[2026-04-08 13:08:42Z INFO ProcessInvokerWrapper]   Require exit code zero: 'False'
+[2026-04-08 13:08:42Z INFO ProcessInvokerWrapper]   Encoding web name:  ; code page: ''
+[2026-04-08 13:08:42Z INFO ProcessInvokerWrapper]   Force kill process on cancellation: 'False'
+[2026-04-08 13:08:42Z INFO ProcessInvokerWrapper]   Redirected STDIN: 'False'
+[2026-04-08 13:08:42Z INFO ProcessInvokerWrapper]   Persist current code page: 'True'
+[2026-04-08 13:08:42Z INFO ProcessInvokerWrapper]   Keep redirected STDIN open: 'False'
+[2026-04-08 13:08:42Z INFO ProcessInvokerWrapper]   High priority process: 'False'
+[2026-04-08 13:08:42Z INFO ProcessInvokerWrapper] Process started with process id 8356, waiting for process exit.
+[2026-04-08 13:08:42Z INFO JobServerQueue] Got a step log file to send to results service.
+[2026-04-08 13:08:42Z INFO JobServerQueue] Starting upload of step log file to results service ResultsLog, C:\Users\user\OneDrive\바탕 화면\at-dog-api\_diag\blocks\278c19f6-538a-4054-9504-dff52f0f23fd_9cc54c74-3099-49d7-bc31-a5f5d5e3646d.1
+[2026-04-08 13:08:42Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'fbb33da2-296f-422b-b26e-50f47fa86979', success rate: 1/1.
+[2026-04-08 13:08:42Z INFO JobServerQueue] Try to upload 1 log files or attachments, success rate: 1/1.
+[2026-04-08 13:08:42Z INFO JobServerQueue] Tried to upload 1 file(s) to results, success rate: 1/1.
+[2026-04-08 13:08:46Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'fbb33da2-296f-422b-b26e-50f47fa86979', success rate: 1/1.
+[2026-04-08 13:08:46Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:46Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:46Z INFO HostContext] Well known directory 'Work': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:48Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'fbb33da2-296f-422b-b26e-50f47fa86979', success rate: 1/1.
+[2026-04-08 13:08:49Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'fbb33da2-296f-422b-b26e-50f47fa86979', success rate: 1/1.
+[2026-04-08 13:08:49Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'fbb33da2-296f-422b-b26e-50f47fa86979', success rate: 1/1.
+[2026-04-08 13:08:50Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'fbb33da2-296f-422b-b26e-50f47fa86979', success rate: 1/1.
+[2026-04-08 13:08:50Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2026-04-08 13:08:50Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2026-04-08 13:08:50Z INFO ProcessInvokerWrapper] Finished process 8356 with exit code 0, and elapsed time 00:00:08.7637437.
+[2026-04-08 13:08:50Z INFO CreateStepSummaryCommand] Step Summary file (C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_temp\_runner_file_commands\step_summary_e736b1fd-2acd-4d36-9212-38d752da74d0) is empty; skipping attachment upload
+[2026-04-08 13:08:50Z INFO StepsRunner] Step result: 
+[2026-04-08 13:08:50Z INFO ExecutionContext] Publish step telemetry for current step {
+  "action": "powershell",
+  "type": "run",
+  "stage": "Main",
+  "stepId": "fbb33da2-296f-422b-b26e-50f47fa86979",
+  "stepContextName": "__run",
+  "result": "succeeded",
+  "errorMessages": [],
+  "executionTimeInSeconds": 9,
+  "startTime": "2026-04-08T13:08:41.9610438Z",
+  "finishTime": "2026-04-08T13:08:50.7819682Z"
+}.
+[2026-04-08 13:08:50Z INFO StepsRunner] No need for updating job result with current step result 'Succeeded'.
+[2026-04-08 13:08:50Z INFO StepsRunner] Current state: job state = ''
+[2026-04-08 13:08:50Z INFO StepsRunner] Processing step: DisplayName='Post Log in to Docker Hub'
+[2026-04-08 13:08:50Z INFO StepsRunner] Evaluating: always()
+[2026-04-08 13:08:50Z INFO StepsRunner] Result: true
+[2026-04-08 13:08:50Z INFO StepsRunner] Starting the step.
+[2026-04-08 13:08:50Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:50Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:50Z INFO HostContext] Well known directory 'Work': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:50Z INFO StepsRunner] Which2: 'chcp'
+[2026-04-08 13:08:50Z INFO StepsRunner] Location: 'C:\WINDOWS\system32\chcp.COM'
+[2026-04-08 13:08:50Z INFO ProcessInvokerWrapper] Starting process:
+[2026-04-08 13:08:50Z INFO ProcessInvokerWrapper]   File name: 'C:\WINDOWS\system32\chcp.COM'
+[2026-04-08 13:08:50Z INFO ProcessInvokerWrapper]   Arguments: '65001'
+[2026-04-08 13:08:50Z INFO ProcessInvokerWrapper]   Working directory: 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:50Z INFO ProcessInvokerWrapper]   Require exit code zero: 'False'
+[2026-04-08 13:08:50Z INFO ProcessInvokerWrapper]   Encoding web name:  ; code page: ''
+[2026-04-08 13:08:50Z INFO ProcessInvokerWrapper]   Force kill process on cancellation: 'False'
+[2026-04-08 13:08:50Z INFO ProcessInvokerWrapper]   Redirected STDIN: 'False'
+[2026-04-08 13:08:50Z INFO ProcessInvokerWrapper]   Persist current code page: 'True'
+[2026-04-08 13:08:50Z INFO ProcessInvokerWrapper]   Keep redirected STDIN open: 'False'
+[2026-04-08 13:08:50Z INFO ProcessInvokerWrapper]   High priority process: 'False'
+[2026-04-08 13:08:50Z INFO ProcessInvokerWrapper] Process started with process id 21060, waiting for process exit.
+[2026-04-08 13:08:50Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2026-04-08 13:08:50Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2026-04-08 13:08:50Z INFO ProcessInvokerWrapper] Finished process 21060 with exit code 0, and elapsed time 00:00:00.0137938.
+[2026-04-08 13:08:50Z INFO StepsRunner] Successfully returned to code page 65001 (UTF8)
+[2026-04-08 13:08:50Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:50Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:50Z INFO HostContext] Well known directory 'Work': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:50Z INFO HostContext] Well known directory 'Actions': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_actions'
+[2026-04-08 13:08:50Z INFO ActionManager] Load action that reference repository from 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_actions\docker\login-action\v3'
+[2026-04-08 13:08:50Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:50Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:50Z INFO HostContext] Well known directory 'Work': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:50Z INFO HostContext] Well known directory 'Actions': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_actions'
+[2026-04-08 13:08:50Z INFO ActionManifestManagerLegacy] Ignore action property author.
+[2026-04-08 13:08:50Z INFO ActionManifestManagerLegacy] Ignore action property branding.
+[2026-04-08 13:08:50Z INFO ActionManifestManagerLegacy] Loaded action.yml file: {
+  "name": "Docker Login",
+  "description": "GitHub Action to login against a Docker registry",
+  "inputs": {
+    "type": 2,
+    "map": [
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 10,
+          "col": 3,
+          "lit": "registry"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 13,
+          "col": 3,
+          "lit": "username"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 16,
+          "col": 3,
+          "lit": "password"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 19,
+          "col": 3,
+          "lit": "ecr"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 22,
+          "col": 3,
+          "lit": "scope"
+        },
+        "value": ""
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 25,
+          "col": 3,
+          "lit": "logout"
+        },
+        "value": {
+          "type": 0,
+          "file": 2,
+          "line": 27,
+          "col": 14,
+          "lit": "true"
+        }
+      },
+      {
+        "key": {
+          "type": 0,
+          "file": 2,
+          "line": 29,
+          "col": 3,
+          "lit": "registry-auth"
+        },
+        "value": ""
+      }
+    ]
+  },
+  "execution": {
+    "executionType": "nodeJS",
+    "hasPre": false,
+    "hasPost": true,
+    "script": "dist/index.js",
+    "pre": null,
+    "post": "dist/index.js",
+    "nodeVersion": "node20",
+    "cleanupCondition": "always()",
+    "initCondition": "always()"
+  },
+  "deprecated": null
+}
+[2026-04-08 13:08:50Z INFO ActionManager] Action pre node.js file: N/A.
+[2026-04-08 13:08:50Z INFO ActionManager] Action node.js file: dist/index.js.
+[2026-04-08 13:08:50Z INFO ActionManager] Action post node.js file: dist/index.js.
+[2026-04-08 13:08:50Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:50Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:50Z INFO HostContext] Well known directory 'Work': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:50Z INFO HostContext] Well known directory 'Temp': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_temp'
+[2026-04-08 13:08:50Z INFO ExecutionContext] Write event payload to C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_temp\_github_workflow\event.json
+[2026-04-08 13:08:50Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:50Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:50Z INFO HostContext] Well known directory 'Work': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:50Z INFO HostContext] Well known directory 'Temp': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_temp'
+[2026-04-08 13:08:50Z INFO ExtensionManager] Getting extensions for interface: 'GitHub.Runner.Worker.IFileCommandExtension'
+[2026-04-08 13:08:50Z INFO ActionManifestManagerLegacy] Input 'registry': default value evaluate result: ""
+[2026-04-08 13:08:50Z INFO ActionManifestManagerLegacy] Input 'ecr': default value evaluate result: ""
+[2026-04-08 13:08:50Z INFO ActionManifestManagerLegacy] Input 'scope': default value evaluate result: ""
+[2026-04-08 13:08:50Z INFO ActionManifestManagerLegacy] Input 'logout': default value evaluate result: {
+  "type": 0,
+  "file": 2,
+  "line": 27,
+  "col": 14,
+  "lit": "true"
+}
+[2026-04-08 13:08:50Z INFO ActionManifestManagerLegacy] Input 'registry-auth': default value evaluate result: ""
+[2026-04-08 13:08:50Z INFO ExtensionManager] Getting extensions for interface: 'GitHub.Runner.Worker.IActionCommandExtension'
+[2026-04-08 13:08:50Z INFO ActionCommandManager] Register action command extension for command internal-set-repo-path
+[2026-04-08 13:08:50Z INFO ActionCommandManager] Register action command extension for command set-env
+[2026-04-08 13:08:50Z INFO ActionCommandManager] Register action command extension for command set-output
+[2026-04-08 13:08:50Z INFO ActionCommandManager] Register action command extension for command save-state
+[2026-04-08 13:08:50Z INFO ActionCommandManager] Register action command extension for command add-path
+[2026-04-08 13:08:50Z INFO ActionCommandManager] Register action command extension for command add-mask
+[2026-04-08 13:08:50Z INFO ActionCommandManager] Register action command extension for command add-matcher
+[2026-04-08 13:08:50Z INFO ActionCommandManager] Register action command extension for command remove-matcher
+[2026-04-08 13:08:50Z INFO ActionCommandManager] Register action command extension for command warning
+[2026-04-08 13:08:50Z INFO ActionCommandManager] Register action command extension for command error
+[2026-04-08 13:08:50Z INFO ActionCommandManager] Register action command extension for command notice
+[2026-04-08 13:08:50Z INFO ActionCommandManager] Register action command extension for command debug
+[2026-04-08 13:08:50Z INFO ActionCommandManager] Register action command extension for command group
+[2026-04-08 13:08:50Z INFO ActionCommandManager] Register action command extension for command endgroup
+[2026-04-08 13:08:50Z INFO ActionCommandManager] Register action command extension for command echo
+[2026-04-08 13:08:50Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:50Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:50Z INFO HostContext] Well known directory 'Externals': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\externals'
+[2026-04-08 13:08:50Z INFO ProcessInvokerWrapper] Starting process:
+[2026-04-08 13:08:50Z INFO ProcessInvokerWrapper]   File name: 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\externals\node20\bin\node.exe'
+[2026-04-08 13:08:50Z INFO ProcessInvokerWrapper]   Arguments: '"C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_actions\docker\login-action\v3\dist/index.js"'
+[2026-04-08 13:08:50Z INFO ProcessInvokerWrapper]   Working directory: 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\hw1\hw1'
+[2026-04-08 13:08:50Z INFO ProcessInvokerWrapper]   Require exit code zero: 'False'
+[2026-04-08 13:08:50Z INFO ProcessInvokerWrapper]   Encoding web name: utf-8 ; code page: '65001'
+[2026-04-08 13:08:50Z INFO ProcessInvokerWrapper]   Force kill process on cancellation: 'False'
+[2026-04-08 13:08:50Z INFO ProcessInvokerWrapper]   Redirected STDIN: 'False'
+[2026-04-08 13:08:50Z INFO ProcessInvokerWrapper]   Persist current code page: 'True'
+[2026-04-08 13:08:50Z INFO ProcessInvokerWrapper]   Keep redirected STDIN open: 'False'
+[2026-04-08 13:08:50Z INFO ProcessInvokerWrapper]   High priority process: 'False'
+[2026-04-08 13:08:50Z INFO ProcessInvokerWrapper] Process started with process id 25168, waiting for process exit.
+[2026-04-08 13:08:50Z INFO JobServerQueue] Try to append 1 batches web console lines for record '33e1d745-1307-41ac-9c4b-27fca066b929', success rate: 1/1.
+[2026-04-08 13:08:50Z INFO JobServerQueue] Got a step log file to send to results service.
+[2026-04-08 13:08:50Z INFO JobServerQueue] Starting upload of step log file to results service ResultsLog, C:\Users\user\OneDrive\바탕 화면\at-dog-api\_diag\blocks\278c19f6-538a-4054-9504-dff52f0f23fd_fbb33da2-296f-422b-b26e-50f47fa86979.1
+[2026-04-08 13:08:51Z INFO JobServerQueue] Try to upload 1 log files or attachments, success rate: 1/1.
+[2026-04-08 13:08:51Z INFO JobServerQueue] Try to append 1 batches web console lines for record '33e1d745-1307-41ac-9c4b-27fca066b929', success rate: 1/1.
+[2026-04-08 13:08:51Z INFO JobServerQueue] Tried to upload 1 file(s) to results, success rate: 1/1.
+[2026-04-08 13:08:56Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:56Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:56Z INFO HostContext] Well known directory 'Work': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work'
+[2026-04-08 13:08:57Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2026-04-08 13:08:57Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2026-04-08 13:08:57Z INFO ProcessInvokerWrapper] Finished process 25168 with exit code 0, and elapsed time 00:00:06.4589762.
+[2026-04-08 13:08:57Z INFO CreateStepSummaryCommand] Step Summary file (C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_temp\_runner_file_commands\step_summary_c3475270-ef3a-480f-af4b-404d3ea7774c) is empty; skipping attachment upload
+[2026-04-08 13:08:57Z INFO StepsRunner] Step result: 
+[2026-04-08 13:08:57Z INFO ExecutionContext] Publish step telemetry for current step {
+  "action": "docker/login-action",
+  "ref": "v3",
+  "type": "node20",
+  "stage": "Post",
+  "stepId": "33e1d745-1307-41ac-9c4b-27fca066b929",
+  "result": "succeeded",
+  "errorMessages": [],
+  "executionTimeInSeconds": 7,
+  "startTime": "2026-04-08T13:08:50.7843183Z",
+  "finishTime": "2026-04-08T13:08:57.2825195Z"
+}.
+[2026-04-08 13:08:57Z INFO StepsRunner] No need for updating job result with current step result 'Succeeded'.
+[2026-04-08 13:08:57Z INFO StepsRunner] Current state: job state = ''
+[2026-04-08 13:08:57Z INFO JobRunner] Finalize job.
+[2026-04-08 13:08:57Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:57Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:57Z INFO HostContext] Well known directory 'Diag': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_diag'
+[2026-04-08 13:08:57Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:08:57Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:08:57Z INFO HostContext] Well known directory 'Diag': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_diag'
+[2026-04-08 13:08:57Z INFO JobExtension] Initialize Env context
+[2026-04-08 13:08:57Z INFO JobExtension] Initialize steps context
+[2026-04-08 13:08:57Z INFO JobExtension] Total accessible running process: 369.
+[2026-04-08 13:08:57Z INFO JobExtension] Inspecting process environment variables. PID: 22720 (svchost)
+[2026-04-08 13:08:57Z WARN JobExtension] Ignore exception during read process environment variables: 액세스가 거부되었습니다.
+[2026-04-08 13:08:57Z INFO JobExtension] Inspecting process environment variables. PID: 15936 (dllhost)
+[2026-04-08 13:08:57Z WARN JobExtension] Ignore exception during read process environment variables: 액세스가 거부되었습니다.
+[2026-04-08 13:08:57Z INFO JobExtension] Inspecting process environment variables. PID: 11796 (svchost)
+[2026-04-08 13:08:57Z WARN JobExtension] Ignore exception during read process environment variables: 액세스가 거부되었습니다.
+[2026-04-08 13:08:57Z INFO JobExtension] Wait for all connectivity checks to finish.
+[2026-04-08 13:08:57Z INFO JobExtension] Connectivity check result: GitHub.Runner.Worker.JobExtension+CheckResult
+[2026-04-08 13:08:57Z INFO JobExtension] Connectivity check result: GitHub.Runner.Worker.JobExtension+CheckResult
+[2026-04-08 13:08:57Z INFO JobExtension] Connectivity check result: GitHub.Runner.Worker.JobExtension+CheckResult
+[2026-04-08 13:08:57Z INFO ExecutionContext] Publish step telemetry for current step {
+  "action": "complete_job",
+  "type": "runner",
+  "stage": "Post",
+  "stepId": "d0fe8238-fbc7-4e86-ab2b-6dc871fa792a",
+  "result": "succeeded",
+  "errorMessages": [
+    "Node.js 20 actions are deprecated. The following actions are running on Node.js 20 and may not work as expected: docker/login-action@v3. Actions will be forced to run with Node.js 24 by default starting June 2nd, 2026. Node.js 20 will be removed from the r"
+  ],
+  "executionTimeInSeconds": 1,
+  "startTime": "2026-04-08T13:08:57.2885802Z",
+  "finishTime": "2026-04-08T13:08:57.3366097Z"
+}.
+[2026-04-08 13:08:57Z INFO JobRunner] Job result after all job steps finish: Succeeded
+[2026-04-08 13:08:57Z INFO JobRunner] Completing the job execution context.
+[2026-04-08 13:08:57Z INFO JobRunner] Shutting down the job server queue.
+[2026-04-08 13:08:57Z INFO JobServerQueue] Fire signal to shutdown all queues.
+[2026-04-08 13:08:57Z INFO JobServerQueue] All queue process task stopped.
+[2026-04-08 13:08:57Z INFO JobServerQueue] Try to append 1 batches web console lines for record '33e1d745-1307-41ac-9c4b-27fca066b929', success rate: 1/1.
+[2026-04-08 13:08:57Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'd0fe8238-fbc7-4e86-ab2b-6dc871fa792a', success rate: 1/1.
+[2026-04-08 13:08:57Z INFO JobServerQueue] Web console line queue drained.
+[2026-04-08 13:08:57Z INFO JobServerQueue] Uploading 3 files in one shot.
+[2026-04-08 13:08:57Z INFO JobServerQueue] Try to upload 3 log files or attachments, success rate: 3/3.
+[2026-04-08 13:08:57Z INFO JobServerQueue] File upload queue drained.
+[2026-04-08 13:08:57Z INFO JobServerQueue] Starting results-based upload queue...
+[2026-04-08 13:08:57Z INFO JobServerQueue] Uploading 3 file(s) in one shot through results service.
+[2026-04-08 13:08:57Z INFO JobServerQueue] Got a step log file to send to results service.
+[2026-04-08 13:08:57Z INFO JobServerQueue] Starting upload of step log file to results service ResultsLog, C:\Users\user\OneDrive\바탕 화면\at-dog-api\_diag\blocks\278c19f6-538a-4054-9504-dff52f0f23fd_33e1d745-1307-41ac-9c4b-27fca066b929.1
+[2026-04-08 13:08:58Z INFO JobServerQueue] Got a step log file to send to results service.
+[2026-04-08 13:08:58Z INFO JobServerQueue] Starting upload of step log file to results service ResultsLog, C:\Users\user\OneDrive\바탕 화면\at-dog-api\_diag\blocks\278c19f6-538a-4054-9504-dff52f0f23fd_d0fe8238-fbc7-4e86-ab2b-6dc871fa792a.1
+[2026-04-08 13:08:59Z INFO JobServerQueue] Got a job log file to send to results service.
+[2026-04-08 13:08:59Z INFO JobServerQueue] Starting upload of job log file to results service ResultsLog, C:\Users\user\OneDrive\바탕 화면\at-dog-api\_diag\blocks\278c19f6-538a-4054-9504-dff52f0f23fd_445ae2bf-57f9-52b9-b743-916f1f1cc265.1
+[2026-04-08 13:09:00Z INFO JobServerQueue] Tried to upload 3 file(s) to results, success rate: 3/3.
+[2026-04-08 13:09:00Z INFO JobServerQueue] Results upload queue drained.
+[2026-04-08 13:09:00Z INFO JobServerQueue] Timeline update queue drained.
+[2026-04-08 13:09:00Z INFO JobServerQueue] Disposing job server ...
+[2026-04-08 13:09:00Z INFO JobServerQueue] Disposing results server ...
+[2026-04-08 13:09:00Z INFO JobServerQueue] All queue process tasks have been stopped, and all queues are drained.
+[2026-04-08 13:09:00Z INFO TempDirectoryManager] Cleaning runner temp folder: C:\Users\user\OneDrive\바탕 화면\at-dog-api\_work\_temp
+[2026-04-08 13:09:01Z INFO HostContext] Well known directory 'Bin': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\bin'
+[2026-04-08 13:09:01Z INFO HostContext] Well known directory 'Root': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api'
+[2026-04-08 13:09:01Z INFO HostContext] Well known directory 'Diag': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_diag'
+[2026-04-08 13:09:01Z INFO HostContext] Well known config file 'Telemetry': 'C:\Users\user\OneDrive\바탕 화면\at-dog-api\_diag\.telemetry'
+[2026-04-08 13:09:01Z INFO JobRunner] Raising job completed against run service
+[2026-04-08 13:09:01Z INFO Worker] Job completed.

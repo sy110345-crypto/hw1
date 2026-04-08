@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  # 1. 빌드 및 푸시 작업 (기본 이미지 빌드는 Ubuntu 환경에서 실행)
+  # 1. 빌드 및 푸시 작업 (GitHub 클라우드의 Ubuntu 환경에서 실행)
   docker:
     runs-on: ubuntu-latest
     outputs:
@@ -43,7 +43,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  # 2. 로컬 컴퓨터(Self-hosted Runner)에서의 배포 작업
+  # 2. 로컬 컴퓨터(Windows Self-hosted Runner)에서의 배포 작업
   deploy:
     needs: docker
     runs-on: self-hosted
@@ -60,13 +60,21 @@ jobs:
           # 1. 최신 이미지 받아오기
           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/cat-dog-api:latest
           
-          # 2. 기존 컨테이너 중지 및 삭제 (PowerShell 문법)
-          docker stop cat-dog-api-container 2>$null
-          docker rm cat-dog-api-container 2>$null
+          # 2. 기존 컨테이너 확인 후 처리 (PowerShell 안정성 강화)
+          $containerName = "cat-dog-api-container"
+          $exists = docker ps -a -q --filter "name=$containerName"
           
-          # 3. 새 컨테이너 실행 (줄바꿈은 백틱 ` 사용)
+          if ($exists) {
+              Write-Host "기존 컨테이너($containerName)를 중지하고 삭제합니다..."
+              docker stop $containerName
+              docker rm $containerName
+          } else {
+              Write-Host "실행 중인 기존 컨테이너가 없습니다."
+          }
+          
+          # 3. 새 컨테이너 실행 (PowerShell 줄바꿈 기호 ` 사용)
           docker run -d `
-            --name cat-dog-api-container `
+            --name $containerName `
             -p 8080:8080 `
             --restart always `
             ${{ secrets.DOCKERHUB_USERNAME }}/cat-dog-api:latest

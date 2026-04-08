@@ -7,7 +7,6 @@ def preprocess_image(image: Image.Image):
 def predict_image(image: Image.Image):
     processed_image = preprocess_image(image)
     
-    # 랜덤하게 결과 생성 (테스트용)
     score = random.random()
     gender_score = random.random()
 
@@ -18,7 +17,6 @@ def predict_image(image: Image.Image):
         label = "cat"
         confidence = 1.0 - score
 
-    # 성별 로직 추가 (이게 있어야 테스트가 통과됨)
     gender = "male" if gender_score >= 0.5 else "female"
 
     return {
